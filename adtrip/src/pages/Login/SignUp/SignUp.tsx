@@ -1,53 +1,48 @@
 import React from "react";
 import coverImage from "/carte.jpg";
 import googleIcon from "/google.png";
+
 import backgroundIcon2 from "/airport.png";
 import backgroundIcon3 from "/car.png";
 import backgroundIcon4 from "/bridge.png";
 
-const LoginPage: React.FC = () => {
+const SignUpPage: React.FC = () => {
   return (
-    <div className="w-full h-screen flex flex-col lg:flex-row overflow-hidden">
+    <div className=" -ml-30 -mt-30 w-full h-screen flex overflow-hidden">
       {/* Left Side with Image */}
-      <div className="relative w-full lg:w-1/2 h-1/3 lg:h-full flex flex-col">
-        <div className="absolute top-[15%] sm:top-[20%] left-[5%] py-5 px-4 lg:py-20 lg:left-[10%] flex flex-col ">
-          <h1 className="text-2xl lg:text-3xl text-white my-4 font-bold text-center lg:text-left">
+      <div className="relative w-1/2 h-full flex flex-col">
+        <div className="absolute top-[25%] left-[10%] py-20 flex flex-col">
+          <h1 className="text-3xl text-white my-4 font-bold">
             Explore Cameroon's Most Beautiful Sites
           </h1>
-          <p className="text-sm lg:text-base text-white font-semibold text-center lg:text-left">
+          <p className="text-base  text-white font-semibold">
             Want a memorable trip? Adtrip has you covered.
           </p>
         </div>
-        <img
-          src={coverImage}
-          className="h-full w-full object-cover"
-          alt="Cover"
-        />
+        <img src={coverImage} className="h-full w-full object-cover" alt="Cover" />
       </div>
 
       {/* Right Side with Form */}
       <div
-        className="w-full lg:w-1/2 h-full bg-slate-50 flex flex-col p-6 lg:p-8 justify-between overflow-y-auto"
+        className="w-1/2 h-full bg-slate-50 flex flex-col p-8 justify-between overflow-y-hidden relative max-w-[500px]"
         style={{
-          backgroundImage: `url(${backgroundIcon2}), url(${backgroundIcon3}), url(${backgroundIcon4})`,
-          backgroundRepeat: "no-repeat, no-repeat, no-repeat",
+          backgroundImage: ` url(${backgroundIcon2}), url(${backgroundIcon3}), url(${backgroundIcon4})`,
+          backgroundRepeat: "no-repeat, no-repeat, no-repeat, no-repeat",
           backgroundPosition: "bottom center, bottom left, bottom right",
-          backgroundSize: "30px, 30px, 40px",
+          backgroundSize: "30px, 30px, 40px, 30px",
         }}
       >
-        <div className="flex flex-col space-y-6 lg:space-y-8">
+        <div className="flex flex-col space-y-11 ">
           {/* Title */}
           <div>
-            <h1 className="text-black font-bold text-left text-2xl lg:text-4xl">
-              Login
-            </h1>
-            <p className="text-slate-800 text-sm lg:text-base text-left font-normal mt-2 lg:mt-4">
+            <h1 className="text-black font-bold text-left pt-30 mt-10 text-4xl">Login</h1>
+            <p className="text-slate-800 text-base text-left font-normal mt-4">
               Welcome Back! Please enter your credentials.
             </p>
           </div>
 
           {/* Form */}
-          <form className="space-y-4 lg:space-y-6">
+          <form className="space-y-6">
             {/* Email Field */}
             <div>
               <input
@@ -123,4 +118,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+export default SignUpPage;
