@@ -80,7 +80,7 @@ const DummyCards: React.FC = () => {
   const settings = {
     dots: true,
     infinite: true,
-    slidesToShow: 3,
+    slidesToShow: 4,
     slidesToScroll: 1,
     speed: 1000, // Transition speed
     autoplay: true,
