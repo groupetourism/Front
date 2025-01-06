@@ -5,6 +5,9 @@ import DummyCards from "../../components/Cards/DummyCard";
 import SiteList from "../../components/SiteList/SiteList";
 import AccomodationsList from "../../components/Accomodations/AcommodationList";
 import SitePassList from "../../components/SitePass/SitePassList";
+import EventSection from "../../components/Events/EventSection";
+import SearchBar from "../../components/Search/Search";
+
 const HomePage: React.FC = () => {
   return (
     <>
@@ -36,6 +39,11 @@ const HomePage: React.FC = () => {
               </button>
             </div>
           </div>
+
+          {/* SearchBar Section */}
+          <section className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-full max-w-[90%] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl z-10">
+            <SearchBar />
+          </section>
         </div>
 
         {/* Popular Destinations Section */}
@@ -144,6 +152,11 @@ const HomePage: React.FC = () => {
             </button>
           </div>
           <SitePassList />
+        </section>
+
+        {/* Event Section */}
+        <section className="py-10 px-0 sm:px-0 lg:px-0 bg-white">
+          <EventSection />
         </section>
       </div>
     </>
