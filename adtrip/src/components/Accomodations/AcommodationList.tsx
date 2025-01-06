@@ -18,7 +18,7 @@ const NextArrow: React.FC<{ onClick?: () => void }> = ({ onClick }) => {
   return (
     <div
       onClick={onClick}
-      className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-transparent bg-opacity-50 text-white p-2 rounded-full cursor-pointer  hover:bg-opacity-75 z-10"
+      className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-transparent bg-opacity-50 text-white -p-3 rounded-full cursor-pointer  hover:bg-opacity-75 z-10 "
     >
      <img src={Next} 
      className="w-6 h-6 "
@@ -32,7 +32,7 @@ const PrevArrow: React.FC<{ onClick?: () => void }> = ({ onClick }) => {
   return (
     <div
       onClick={onClick}
-      className="absolute top-1/2 left-0 transform -translate-y-1/2bg-opacity-50 text-white p-2 rounded-full cursor-pointer hover:bg-opacity-75 z-10"
+      className="absolute top-1/2 left-0 transform -translate-y-1/2bg-opacity-50 text-white -p-3 rounded-full cursor-pointer hover:bg-opacity-75 z-10"
     >
       <img src={Previous}
       className="w-6 h-6" alt="" />
@@ -77,9 +77,9 @@ const AccomodationsList: React.FC = () => {
 
   // React Slick settings
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
-    slidesToShow: 3,
+    slidesToShow: 4,
     slidesToScroll: 1,
     speed: 1000, // Transition speed
     autoplay: true,
