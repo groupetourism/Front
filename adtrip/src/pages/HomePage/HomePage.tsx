@@ -1,12 +1,12 @@
 import React from "react";
 import NavBar from "../../components/NavBar/NavBar";
 import coverImage from "/cover.jpg";
-import DummyCards from "../../components/Cards/DummyCard";
 import SiteList from "../../components/SiteList/SiteList";
 import AccomodationsList from "../../components/Accomodations/AcommodationList";
 import SitePassList from "../../components/SitePass/SitePassList";
 import EventSection from "../../components/Events/EventSection";
 import SearchBar from "../../components/Search/Search";
+import CardsList from "../../components/Cards/CardsList";
 
 const HomePage: React.FC = () => {
   return (
@@ -70,7 +70,7 @@ const HomePage: React.FC = () => {
               </svg>
             </button>
           </div>
-          <DummyCards />
+          <CardsList />
         </section>
 
         {/* Top Sites to Visit Section */}

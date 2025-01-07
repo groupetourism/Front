@@ -45,7 +45,7 @@ const PrevArrow: React.FC<{ onClick?: () => void }> = ({ onClick }) => {
   );
 };
 
-const DummyCards: React.FC = () => {
+const CardsList: React.FC = () => {
   const sliderRef = useRef<Slider>(null); // Reference to the slider
   const [isPlaying, setIsPlaying] = useState(true); // State to track autoplay status
 
@@ -139,4 +139,4 @@ const DummyCards: React.FC = () => {
   );
 };
 
-export default DummyCards;
+export default CardsList;
