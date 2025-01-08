@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom"; // Import useNavigate and Link
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import icons
-import { formatPhoneNumber, validateForm } from "../../utils/FormValidation";
+import { validatePhoneNumber, validateForm } from "../../utils/FormValidation";
+import { signUp } from "../../api/Auth";
 import coverImage from "/carte.jpg";
 import googleIcon from "/google.png";
 import backgroundIcon2 from "/airport.png";
@@ -15,11 +17,13 @@ const SignUpPage: React.FC = () => {
     email: "",
     phone: "",
     password: "",
-    confirmPassword: "",
+    password_confirmation: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showPassword, setShowPassword] = useState(false); // State for password visibility
   const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State for confirm password visibility
+  const [apiError, setApiError] = useState<string | null>(null);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const toggleMoreFields = () => {
     setShowMoreFields(!showMoreFields);
@@ -28,14 +32,9 @@ const SignUpPage: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
-
-    // Format phone number on the fly
-    if (id === "phone") {
-      setFormData((prev) => ({ ...prev, phone: formatPhoneNumber(value) }));
-    }
   };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Validate form
@@ -43,14 +42,31 @@ const SignUpPage: React.FC = () => {
     setErrors(errors);
 
     if (isValid) {
-      // Proceed with form submission logic
-      console.log("Form is valid. Data:", formData);
-      alert("Form submitted successfully!");
-    } else {
-      console.log("Form has errors:", errors);
+      try {
+        console.log("Form Data:", formData); // Log form data
+        const { data, error } = await signUp({
+          ...formData,
+          password_confirmation: formData.password_confirmation, // Ensure this is sent to the API
+        });
+        if (error) {
+          console.error("API Error:", error); // Log API error
+          setApiError(error);
+        } else {
+          console.log("API Response:", data); // Log API response
+          alert("Sign-up successful! Redirecting to login...");
+          navigate("/login"); // Redirect to the login page
+        }
+      } catch (error: any) {
+        console.error("Sign-up failed:", error); // Log unexpected error
+        console.error("Error Details:", {
+          message: error.message,
+          response: error.response?.data,
+          status: error.response?.status,
+        });
+        setApiError("An unexpected error occurred. Please try again.");
+      }
     }
   };
-
   // Toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
@@ -196,10 +212,10 @@ const SignUpPage: React.FC = () => {
                   {/* Confirm Password Field */}
                   <div className="relative">
                     <input
-                      id="confirmPassword"
+                      id="password_confirmation"
                       type={showConfirmPassword ? "text" : "password"} // Toggle input type
                       placeholder="Confirm Password"
-                      value={formData.confirmPassword}
+                      value={formData.password_confirmation}
                       onChange={handleChange}
                       className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-600 focus:border-transparent"
                     />
@@ -214,8 +230,8 @@ const SignUpPage: React.FC = () => {
                         <FaEye className="text-gray-500" /> // Visible icon
                       )}
                     </button>
-                    {errors.confirmPassword && (
-                      <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>
+                    {errors.password_confirmation && (
+                      <p className="text-red-500 text-sm mt-1">{errors.password_confirmation}</p>
                     )}
                   </div>
                 </>
@@ -249,7 +265,7 @@ const SignUpPage: React.FC = () => {
                 </button>
               </div>
             </form>
-
+            {apiError && <p style={{ color: "red" }}>{apiError}</p>}
             {/* Divider */}
             <div className="flex items-center space-x-2">
               <div className="w-full h-px bg-gray-300"></div>
@@ -260,9 +276,12 @@ const SignUpPage: React.FC = () => {
             {/* Login Prompt */}
             <p className="text-center text-sm text-gray-600">
               Already have an account?{" "}
-              <span className="font-semibold text-black underline underline-offset-2 cursor-pointer hover:text-slate-800">
+              <Link
+                to="/login"
+                className="font-semibold text-black underline underline-offset-2 cursor-pointer hover:text-slate-800"
+              >
                 Log in here
-              </span>
+              </Link>
             </p>
           </div>
         </div>

@@ -1,27 +1,20 @@
-import './App.css'
+import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; // Import Router and Routes
 import HomePage from './pages/HomePage/HomePage';
 import LoginPage from './pages/Login/LoginPage';
-import NavBar from './components/NavBar/NavBar';
-import DummyCards from './components/Cards/CardsList';
-import SiteList from './components/SiteList/SiteList';
-import EventSection from './components/Events/EventSection';
-import SearchBar from './components/Search/Search';
 import SignUpPage from './pages/SignUp/SignUp';
+
 function App() {
   return (
-    <>
-      <div>
-        {/* <LoginPage/> */}
-        {/* <HomePage/> */}
-        {/* <SearchBar /> */}
-        <SignUpPage />
-        {/* <SiteList /> */}
-        {/* <NavBar/> */}
-        {/*<DummyCards></DummyCards> */}
-        {/* <EventSection /> */}
-       </div>
-    </>
-  )
+    <Router>
+      <Routes>
+        {/* Define your routes */}
+        <Route path="/" element={<HomePage/>} /> {/* Home page */}
+        <Route path="/signup" element={<SignUpPage />} /> {/* Sign-up page */}
+        <Route path="/login" element={<LoginPage />} /> {/* Login page */}
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
