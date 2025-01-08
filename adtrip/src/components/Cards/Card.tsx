@@ -1,12 +1,14 @@
   import React from "react";
 
   interface CardProps {
-    imageUrl: string;
+    imageUrl: string |null;
     name: string;
-    review: string;
+    description: string|null;
   }
 
-  const Card: React.FC<CardProps> = ({ imageUrl, name, review }) => {
+  const Card: React.FC<CardProps> = ({ imageUrl, name, description }) => {
+    const imageSrc = imageUrl || "https://via.placeholder.com/150";
+    const descriptionFallback=description||"No available description";
     return (
       <div
         className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2 w-auto max-w-xs sm:max-w-sm md:max-w-md lg:max-w-sm mx-auto overflow-hidden"
@@ -14,7 +16,7 @@
         {/* Image Section */}
         <div className="relative">
           <img
-            src={imageUrl}
+            src={imageSrc}
             alt={name}
             className="w-full h-40 object-cover"
           />
@@ -29,7 +31,7 @@
         {/* Content Section */}
         <div className="p-4 max-h-[100px] overflow-hidden">
           <h2 className="text-lg text-start font-semibold mb-2">{name}</h2>
-          <p className="text-sm text-start text-gray-600 line-clamp-3">{review}</p>
+          <p className="text-sm text-start text-gray-600 line-clamp-3">{descriptionFallback}</p>
         </div>
       </div>
     );
