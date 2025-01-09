@@ -1,24 +1,50 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SiteCard from "./SiteCard";
+import { SiteData, fetchSites } from "../../api/Sites";
 
 const SiteList: React.FC = () => {
-  // Dummy data: Tourist sites in Cameroon
-  const sites = [
-    { name: "Mount Cameroon", imageUrl: "africa.jpg" },
-    { name: "Waza National Park", imageUrl: "cover.jpg" },
-    { name: "Limbe Botanical Garden", imageUrl: "map.jpg" },
-    { name: "Kribi Beach", imageUrl: "cover.jpg" },
-    { name: "Dja Faunal Reserve", imageUrl: "cover.jpg" },
-    { name: "Ekom-Nkam Waterfalls", imageUrl: "cover.jpg" },
-    { name: "Bafut Palace", imageUrl: "cover.jpg" },
-    { name: "Lake Nyos", imageUrl: "cover.jpg" },
-  ];
+  const [sites, setSites] = useState<SiteData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [visibleSites, setVisibleSites] = useState(15); // Number of sites to display
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data, error } = await fetchSites();
+      if (data) {
+        setSites(data);
+        setLoading(false);
+      } else if (error) {
+        setError(error);
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  // Limit the number of sites to `visibleSites`
+  const limitedSites = sites.slice(0, visibleSites);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
-      {sites.map((site, index) => (
-        <SiteCard key={index} name={site.name} imageUrl={site.imageUrl} />
-      ))}
+    <div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+        {limitedSites.map((site) => (
+          <SiteCard key={site.id} name={site.name} imageUrl={site.image} />
+        ))}
+      </div>
+      {sites.length > visibleSites && (
+        <div className="flex justify-center mt-4">
+          {/* <button
+            onClick={() => setVisibleSites(visibleSites + 10)} // Load 10 more sites
+            className="px-4 py-2 bg-transparent text-black rounded-lg hover:text-undeline transition"
+          >
+            Show More
+          </button> */}
+        </div>
+      )}
     </div>
   );
 };
