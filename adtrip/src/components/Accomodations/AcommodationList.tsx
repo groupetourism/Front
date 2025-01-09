@@ -32,11 +32,10 @@ const PrevArrow: React.FC<{ onClick?: () => void }> = ({ onClick }) => {
 };
 
 const AccommodationsList: React.FC = () => {
-  const sliderRef = useRef<Slider>(null); // Reference to the slider
-  const [isPlaying, setIsPlaying] = useState(true); // State to track autoplay status
-  const [accommodations, setAccommodations] = useState<AccommodationData[]>([]); // State for accommodations
-  const [loading, setLoading] = useState(true); // State for loading
-  const [error, setError] = useState<string | null>(null); // State for error
+  const sliderRef = useRef<Slider>(null);
+  const [accommodations, setAccommodations] = useState<AccommodationData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Fetch accommodations from the API
   useEffect(() => {
@@ -44,22 +43,22 @@ const AccommodationsList: React.FC = () => {
       const { data, error } = await fetchAccommodations();
       if (data) {
         setAccommodations(data);
-        setLoading(false);
       } else if (error) {
         setError(error);
-        setLoading(false);
       }
+      setLoading(false);
     };
     fetchData();
   }, []);
 
+  
   // React Slick settings
   const settings = {
     dots: false,
     infinite: true,
     slidesToShow: 4,
     slidesToScroll: 1,
-    speed: 1000, // Transition speed
+    speed: 1000,
     autoplay: true,
     autoplaySpeed: 2000,
     cssEase: "linear",
@@ -85,21 +84,6 @@ const AccommodationsList: React.FC = () => {
     ],
   };
 
-  // Autoplay toggle effect
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (isPlaying) {
-        sliderRef.current?.slickPause();
-        setIsPlaying(false);
-      } else {
-        sliderRef.current?.slickPlay();
-        setIsPlaying(true);
-      }
-    }, 4000); // Adjust timing: 4 seconds play, 4 seconds stop
-
-    return () => clearInterval(interval); // Cleanup on unmount
-  }, [isPlaying]);
-
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -109,6 +93,7 @@ const AccommodationsList: React.FC = () => {
         {accommodations.map((accommodation) => (
           <div key={accommodation.id} className="px-2">
             <AccommodationCard
+              id={accommodation.id}
               image={accommodation.image}
               name={accommodation.name}
               description={accommodation.description}

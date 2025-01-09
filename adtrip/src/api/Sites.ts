@@ -20,7 +20,7 @@ export interface SiteData {
   department: {
     id: number;
     name: string;
-  } | null; // Include department details
+  } | null;
   created_at: string;
   updated_at: string;
 }

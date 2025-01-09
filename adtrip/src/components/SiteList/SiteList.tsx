@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import SiteCard from "./SiteCard";
 import { SiteData, fetchSites } from "../../api/Sites";
 
@@ -8,7 +7,7 @@ const SiteList: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [visibleSites, setVisibleSites] = useState(15); // Number of sites to display
-  const navigate = useNavigate();
+ 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,9 +23,6 @@ const SiteList: React.FC = () => {
     fetchData();
   }, []);
 
-  const handleSiteClick = (id: number) => {
-    navigate(`/sites/${id}`);
-  };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -43,7 +39,7 @@ const SiteList: React.FC = () => {
             id={site.id}
             name={site.name}
             imageUrl={site.image}
-            onClick={handleSiteClick}
+            
           />
         ))}
       </div>

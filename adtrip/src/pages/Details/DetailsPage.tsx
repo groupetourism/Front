@@ -1,10 +1,18 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 import NavBar from "../../components/NavBar/NavBar";
 import coverImage from "/cover.jpg";
 import SearchBar from "../../components/Search/Search";
 import SiteDetails from "../../components/Details/Sites/SiteDetails";
+import AccommodationDetails from "../../components/Details/Accomodations/AccomodationDetails";
 
 const DetailsPage: React.FC = () => {
+  // Extract the type and id from the URL
+  const { type, id } = useParams<{ type: string; id: string }>();
+
+  // Validate the type
+  const isValidType = type === "sites" || type === "accommodations";
+
   return (
     <>
       {/* Full Page Wrapper */}
@@ -42,9 +50,18 @@ const DetailsPage: React.FC = () => {
           </section>
         </div>
 
-        {/* Site Details Section */}
+        {/* Dynamic Details Section */}
         <section className="py-10 px-6 sm:px-6 lg:px-8">
-          <SiteDetails />
+          {isValidType ? (
+            <>
+              {type === "sites" && <SiteDetails/>}
+              {type === "accommodations" && <AccommodationDetails/>}
+            </>
+          ) : (
+            <div className="text-center text-red-500 text-xl">
+              Invalid detail type. Please check the URL.
+            </div>
+          )}
         </section>
       </div>
     </>

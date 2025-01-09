@@ -1,7 +1,9 @@
 import React from "react";
 import { FaStar } from "react-icons/fa"; // Import the star icon
+import { Link } from "react-router-dom"; // Import Link for navigation
 
 interface CardProps {
+  id: number;
   image: string | null;
   name: string;
   description: string | null;
@@ -9,12 +11,13 @@ interface CardProps {
 }
 
 const AccommodationCard: React.FC<CardProps> = ({
+  id,
   image,
   name,
   description,
   number_of_stars,
 }) => {
-  const imageUrl = image || "./default-accommodation.jpg"; // Fallback image if none is provided
+  const imageUrl =  "./cover.jpg"; // Fallback image if none is provided
   const descriptionFallback = description || "No description available.";
 
   // Function to render star rating
@@ -34,7 +37,10 @@ const AccommodationCard: React.FC<CardProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2 w-auto max-w-xs sm:max-w-sm md:max-w-md lg:max-w-sm mx-auto overflow-hidden">
+    <Link
+      to={`/details/accommodations/${id}`} // Link to the details page
+      className="block bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2 w-auto max-w-xs sm:max-w-sm md:max-w-md lg:max-w-sm mx-auto overflow-hidden"
+    >
       {/* Image Section */}
       <div className="relative">
         <img
@@ -67,7 +73,7 @@ const AccommodationCard: React.FC<CardProps> = ({
           </div>
         )}
       </div>
-    </div>
+    </Link>
   );
 };
 

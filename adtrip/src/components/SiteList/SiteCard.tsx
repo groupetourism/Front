@@ -1,20 +1,20 @@
 import React from "react";
+import { Link } from "react-router-dom"; // Import Link for navigation
 
 interface SiteProps {
   id: number;
   name: string;
   imageUrl: string | null;
-  onClick: (id: number) => void;
 }
 
-const SiteCard: React.FC<SiteProps> = ({ id, imageUrl, name, onClick }) => {
-  const imageSrc = imageUrl || "./default-site.jpg"; // Fallback image
+const SiteCard: React.FC<SiteProps> = ({ id, imageUrl, name}) => {
+  const imageSrc = "./map.jpg"; // Fallback image
 
   return (
-    <div
-      className="flex flex-col sm:flex-row items-center rounded-lg overflow-hidden shadow-md transition hover:shadow-lg w-full max-w-md mx-auto mt-4 bg-slate-50 cursor-pointer"
-      onClick={() => onClick(id)}
-    >
+    <Link
+    to={`/details/sites/${id}`} // Link to the details page
+    className="flex flex-col sm:flex-row items-center rounded-lg overflow-hidden shadow-md transition hover:shadow-lg w-full max-w-md mx-auto mt-4 bg-slate-50 cursor-pointer"
+     >
       {/* Image Section */}
       <div className="w-full sm:w-1/3">
         <img
@@ -30,7 +30,7 @@ const SiteCard: React.FC<SiteProps> = ({ id, imageUrl, name, onClick }) => {
           {name}
         </h3>
       </div>
-    </div>
+    </Link>
   );
 };
 

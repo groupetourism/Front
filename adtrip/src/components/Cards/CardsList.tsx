@@ -93,7 +93,7 @@ const CardsList: React.FC = () => {
         {departments.map((department) => (
           <div key={department.id} className="px-2">
             <Card
-              imageUrl={null} // You can add an image URL if needed
+              imageUrl={null}
               name={department.name}
               description={`Surface Area: ${department.surface_area} km²`} // Customize description
             />
