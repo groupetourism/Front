@@ -1,14 +1,20 @@
 import React from "react";
 
 interface SiteProps {
+  id: number;
   name: string;
-  imageUrl: string |null;
+  imageUrl: string | null;
+  onClick: (id: number) => void;
 }
 
-const SiteCard: React.FC<SiteProps> = ({ imageUrl, name }) => {
-  const imageSrc = "africa.jpg";
+const SiteCard: React.FC<SiteProps> = ({ id, imageUrl, name, onClick }) => {
+  const imageSrc = imageUrl || "./default-site.jpg"; // Fallback image
+
   return (
-    <div className="flex flex-col sm:flex-row items-center rounded-lg overflow-hidden shadow-md transition hover:shadow-lg w-full max-w-md mx-auto mt-4 bg-slate-50">
+    <div
+      className="flex flex-col sm:flex-row items-center rounded-lg overflow-hidden shadow-md transition hover:shadow-lg w-full max-w-md mx-auto mt-4 bg-slate-50 cursor-pointer"
+      onClick={() => onClick(id)}
+    >
       {/* Image Section */}
       <div className="w-full sm:w-1/3">
         <img

@@ -1,13 +1,29 @@
-// Modify this file to match accomodations so it could be used to implement the api call 
 import axios from "axios";
 
 const API_BASE_URL = "http://127.0.0.1:8000/api/v1";
 
-// Interface for Department data
-export interface DepartmentData {
+// Interface for Accommodation data
+export interface AccommodationData {
   id: number;
+  department_id: number;
+  type: number; // 1: hotel, 2: resto, 3: loisir, 4: hopital, 5: agence voyage, 6: auberge
   name: string;
-  surface_area: number;
+  description: string | null;
+  latitude: number;
+  longitude: number;
+  promoter: string | null;
+  number_of_stars: number | null;
+  number_of_rooms: number | null;
+  number_of_beds: number | null;
+  restaurant_capacity: number | null;
+  bar_capacity: number | null;
+  conference_room_capacity: number | null;
+  capacity: number | null;
+  parking: boolean | null;
+  is_public: boolean | null;
+  image: string | null;
+  contact_info: string | null;
+  website: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -26,15 +42,15 @@ const api = axios.create({
   },
 });
 
-// Fetch all departments
-export const fetchDepartments = async (): Promise<ApiResponse> => {
+// Fetch all accommodations
+export const fetchAccommodations = async (): Promise<ApiResponse> => {
   try {
-    console.log("Fetching departments...");
-    const response = await api.get("/departments");
-    console.log("Departments fetched successfully:", response.data);
+    console.log("Fetching accommodations...");
+    const response = await api.get("/accommodations");
+    console.log("Accommodations fetched successfully:", response.data);
     return { data: response.data.data }; // Return the `data` array from the response
   } catch (error: any) {
-    console.error("Error fetching departments:", {
+    console.error("Error fetching accommodations:", {
       message: error.message,
       response: error.response?.data,
       status: error.response?.status,
@@ -43,7 +59,7 @@ export const fetchDepartments = async (): Promise<ApiResponse> => {
       error:
         error.response?.data?.message ||
         error.response?.data?.error ||
-        "Failed to fetch departments",
+        "Failed to fetch accommodations",
     };
   }
 };

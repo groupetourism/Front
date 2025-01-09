@@ -2,16 +2,10 @@ import React, { useRef, useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import AcommodationCard from "./AcommodationCard";
+import AccommodationCard from "./AcommodationCard";
 import Next from "/Next.png";
 import Previous from "/Previous.png";
-interface CardData {
-  id: number;
-  imageUrl: string;
-  name: string;
-  review: string;
-  rating: number;
-}
+import { AccommodationData, fetchAccommodations } from "../../api/Accomodations";
 
 // Custom Next Arrow
 const NextArrow: React.FC<{ onClick?: () => void }> = ({ onClick }) => {
@@ -20,9 +14,7 @@ const NextArrow: React.FC<{ onClick?: () => void }> = ({ onClick }) => {
       onClick={onClick}
       className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-transparent bg-opacity-50 text-white -p-3 rounded-full cursor-pointer  hover:bg-opacity-75 z-10 "
     >
-     <img src={Next} 
-     className="w-6 h-6 "
-     alt="" />
+      <img src={Next} className="w-6 h-6" alt="" />
     </div>
   );
 };
@@ -32,48 +24,34 @@ const PrevArrow: React.FC<{ onClick?: () => void }> = ({ onClick }) => {
   return (
     <div
       onClick={onClick}
-      className="absolute top-1/2 left-0 transform -translate-y-1/2bg-opacity-50 text-white -p-3 rounded-full cursor-pointer hover:bg-opacity-75 z-10"
+      className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-opacity-50 text-white -p-3 rounded-full cursor-pointer hover:bg-opacity-75 z-10"
     >
-      <img src={Previous}
-      className="w-6 h-6" alt="" />
+      <img src={Previous} className="w-6 h-6" alt="" />
     </div>
   );
 };
 
-const AccomodationsList: React.FC = () => {
+const AccommodationsList: React.FC = () => {
   const sliderRef = useRef<Slider>(null); // Reference to the slider
   const [isPlaying, setIsPlaying] = useState(true); // State to track autoplay status
+  const [accommodations, setAccommodations] = useState<AccommodationData[]>([]); // State for accommodations
+  const [loading, setLoading] = useState(true); // State for loading
+  const [error, setError] = useState<string | null>(null); // State for error
 
-  const [cards] = useState<CardData[]>([
-    {
-      id: 1,
-      imageUrl: "carte.jpg",
-      name: "Karl'Inn",
-      review: "A cozy inn with breathtaking views of the Eiffel Tower.",
-      rating: 5,
-    },
-    {
-      id: 2,
-      imageUrl: "https://via.placeholder.com/150",
-      name: "Kilimanjaro Lodge",
-      review: "An amazing lodge at the base of Mount Kilimanjaro.",
-      rating: 4,
-    },
-    {
-      id: 3,
-      imageUrl: "https://via.placeholder.com/150",
-      name: "Barrier Reef Resort",
-      review: "Perfect for snorkelers and divers seeking adventure.",
-      rating: 5,
-    },
-    {
-      id: 4,
-      imageUrl: "africa.jpg",
-      name: "Sahara Desert Camp",
-      review: "Experience stunning desert sunsets at this luxury camp.",
-      rating: 3,
-    },
-  ]);
+  // Fetch accommodations from the API
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data, error } = await fetchAccommodations();
+      if (data) {
+        setAccommodations(data);
+        setLoading(false);
+      } else if (error) {
+        setError(error);
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   // React Slick settings
   const settings = {
@@ -107,6 +85,7 @@ const AccomodationsList: React.FC = () => {
     ],
   };
 
+  // Autoplay toggle effect
   useEffect(() => {
     const interval = setInterval(() => {
       if (isPlaying) {
@@ -121,16 +100,19 @@ const AccomodationsList: React.FC = () => {
     return () => clearInterval(interval); // Cleanup on unmount
   }, [isPlaying]);
 
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
   return (
     <div className="px-4 py-6 text-black relative">
       <Slider ref={sliderRef} {...settings}>
-        {cards.map((card) => (
-          <div key={card.id} className="px-2">
-            <AcommodationCard
-              imageUrl={card.imageUrl}
-              name={card.name}
-              rating={card.rating}
-              description={card.review}
+        {accommodations.map((accommodation) => (
+          <div key={accommodation.id} className="px-2">
+            <AccommodationCard
+              image={accommodation.image}
+              name={accommodation.name}
+              description={accommodation.description}
+              number_of_stars={accommodation.number_of_stars}
             />
           </div>
         ))}
@@ -139,4 +121,4 @@ const AccomodationsList: React.FC = () => {
   );
 };
 
-export default AccomodationsList;
+export default AccommodationsList;

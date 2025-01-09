@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import SiteCard from "./SiteCard";
 import { SiteData, fetchSites } from "../../api/Sites";
 
@@ -7,6 +8,7 @@ const SiteList: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [visibleSites, setVisibleSites] = useState(15); // Number of sites to display
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,6 +24,10 @@ const SiteList: React.FC = () => {
     fetchData();
   }, []);
 
+  const handleSiteClick = (id: number) => {
+    navigate(`/sites/${id}`);
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -32,17 +38,18 @@ const SiteList: React.FC = () => {
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
         {limitedSites.map((site) => (
-          <SiteCard key={site.id} name={site.name} imageUrl={site.image} />
+          <SiteCard
+            key={site.id}
+            id={site.id}
+            name={site.name}
+            imageUrl={site.image}
+            onClick={handleSiteClick}
+          />
         ))}
       </div>
       {sites.length > visibleSites && (
         <div className="flex justify-center mt-4">
-          {/* <button
-            onClick={() => setVisibleSites(visibleSites + 10)} // Load 10 more sites
-            className="px-4 py-2 bg-transparent text-black rounded-lg hover:text-undeline transition"
-          >
-            Show More
-          </button> */}
+          {/* Add a "Load More" button if needed */}
         </div>
       )}
     </div>
