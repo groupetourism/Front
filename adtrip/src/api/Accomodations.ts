@@ -63,3 +63,25 @@ export const fetchAccommodations = async (): Promise<ApiResponse> => {
     };
   }
 };
+
+// Fetching unique accommodation by it's ID
+export const fetchAccommodationById = async (id: number): Promise<ApiResponse> => {
+  try {
+    console.log(`Fetching accommodation with ID ${id}...`);
+    const response = await api.get(`/accommodations/${id}`);
+    console.log("Accommodation fetched successfully:", response.data);
+    return { data: response.data.data }; // Return the `data` object from the response
+  } catch (error: any) {
+    console.error("Error fetching accommodation:", {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status,
+    });
+    return {
+      error:
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Failed to fetch accommodation",
+    };
+  }
+};
