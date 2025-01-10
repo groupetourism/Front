@@ -8,6 +8,7 @@ import EventSection from "../../components/Events/EventSection";
 import SearchBar from "../../components/Search/Search";
 import CardsList from "../../components/Cards/CardsList";
 import EventCard from "../../components/Events/EventCard";
+import EventList from "../../components/Events/EventList";
 
 const HomePage: React.FC = () => {
   return (
@@ -182,7 +183,7 @@ const HomePage: React.FC = () => {
               </svg>
             </button>
           </div>
-          <EventCard />
+          <EventList/>
         </section>
       </div>
     </>

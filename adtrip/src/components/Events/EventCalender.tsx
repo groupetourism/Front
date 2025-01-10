@@ -21,7 +21,6 @@ const EventCalendar: React.FC = () => {
     const fetchEventDates = async () => {
       const { data, error } = await fetchEvents();
       if (data) {
-        console.log("Fetched Events:", data); // Log fetched events
         setEvents(data); // Store all events
       } else if (error) {
         setError(error);
@@ -34,9 +33,7 @@ const EventCalendar: React.FC = () => {
 
   // Memoized function to parse and format event dates
   const parseEventDate = useCallback((dateString: string): Date => {
-    const date = new Date(dateString);
-    // Strip the time component
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    return new Date(dateString);
   }, []);
 
   // Get the days in the current month
