@@ -1,195 +1,124 @@
-import React, { useEffect, useState, useMemo, useCallback } from "react";
-import { fetchEvents } from "../../api/Events"; // Import fetchEvents to get event dates
+import React, { useState } from "react";
+import { FaCalendarAlt, FaStar, FaUtensils, FaFlag, FaEllipsisH } from "react-icons/fa";
+import NavBar from "../../components/NavBar/NavBar";
+import coverImage from "/cover.jpg";
+import SearchBar from "../../components/Search/Search";
+import EventList from "../../components/Events/EventList";
+import EventCalendar from "../../components/Events/EventCalender"; // Import the EventCalendar component
 
-interface Event {
-  id: number;
-  name: string;
-  description: string;
-  start_date: string;
-  end_date: string;
-}
+const EventPage: React.FC = () => {
+  // State for active menu item
+  const [activeItem, setActiveItem] = useState("all");
 
-const EventCalendar: React.FC = () => {
-  const [events, setEvents] = useState<Event[]>([]); // Store all events
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null); // Selected date state
-  const [currentMonth, setCurrentMonth] = useState(new Date()); // Track current month
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState<string | null>(null); // Error state
-
-  // Fetch events from the API
-  useEffect(() => {
-    const fetchEventDates = async () => {
-      const { data, error } = await fetchEvents();
-      if (data) {
-        console.log("Fetched Events:", data); // Log fetched events
-        setEvents(data); // Store all events
-      } else if (error) {
-        setError(error);
-      }
-      setLoading(false);
-    };
-
-    fetchEventDates();
-  }, []);
-
-  // Memoized function to parse and format event dates
-  const parseEventDate = useCallback((dateString: string): Date => {
-    const date = new Date(dateString);
-    // Strip the time component
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  }, []);
-
-  // Get the days in the current month
-  const getDaysInMonth = (date: Date): Date[] => {
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const days: Date[] = [];
-
-    // Add padding for days before the first day of the month
-    for (let i = 0; i < firstDay.getDay(); i++) {
-      days.push(new Date(year, month, 0 - i));
-    }
-
-    // Add days of the current month
-    for (let i = 1; i <= lastDay.getDate(); i++) {
-      days.push(new Date(year, month, i));
-    }
-
-    // Add padding for days after the last day of the month
-    const paddingDays = 7 - (days.length % 7);
-    for (let i = 1; i <= paddingDays; i++) {
-      days.push(new Date(year, month + 1, i));
-    }
-
-    return days;
-  };
-
-  // Handle date selection
-  const handleDateClick = (date: Date) => {
-    setSelectedDate(date);
-  };
-
-  // Handle month navigation
-  const handleMonthChange = (direction: "prev" | "next") => {
-    const newMonth = new Date(currentMonth);
-    newMonth.setMonth(
-      direction === "prev" ? currentMonth.getMonth() - 1 : currentMonth.getMonth() + 1
-    );
-    setCurrentMonth(newMonth);
-  };
-
-  // Memoized function to get events for the selected date
-  const eventsForSelectedDate = useMemo(() => {
-    if (!selectedDate) return [];
-    return events.filter((event) => {
-      const startDate = parseEventDate(event.start_date);
-      return (
-        selectedDate.getDate() === startDate.getDate() &&
-        selectedDate.getMonth() === startDate.getMonth() &&
-        selectedDate.getFullYear() === startDate.getFullYear()
-      );
-    });
-  }, [selectedDate, events, parseEventDate]);
-
-  // Memoized function to check if a date has an event
-  const hasEvent = useCallback(
-    (date: Date): boolean => {
-      return events.some((event) => {
-        const startDate = parseEventDate(event.start_date);
-        return (
-          date.getDate() === startDate.getDate() &&
-          date.getMonth() === startDate.getMonth() &&
-          date.getFullYear() === startDate.getFullYear()
-        );
-      });
-    },
-    [events, parseEventDate]
-  );
-
-  if (loading) return <div className="text-center text-white">Loading...</div>;
-  if (error) return <div className="text-center text-red-500">Error: {error}</div>;
+  // Menu items
+  const menuItems = [
+    { id: "all", label: "All", icon: <FaStar className="text-orange-500" /> },
+    { id: "festivals", label: "Festivals", icon: <FaCalendarAlt className="text-orange-500" /> },
+    { id: "food", label: "Food", icon: <FaUtensils className="text-orange-500" /> },
+    { id: "national", label: "National", icon: <FaFlag className="text-orange-500" /> },
+    { id: "more", label: "More", icon: <FaEllipsisH className="text-orange-500" /> },
+  ];
 
   return (
-    <div className="bg-slate-600 rounded-lg shadow-lg p-4">
-      <h2 className="text-xl font-bold text-white mb-4">Event Calendar</h2>
+    <>
+      {/* Full Page Wrapper */}
+      <div className="relative w-full h-auto bg-gradient-to-b from-slate-50 to-slate-100">
+        {/* Navbar */}
+        <NavBar />
 
-      {/* Month Navigation */}
-      <div className="flex justify-between items-center mb-4">
-        <button
-          onClick={() => handleMonthChange("prev")}
-          className="bg-white p-2 rounded-lg shadow-md"
-        >
-          Previous
-        </button>
-        <h3 className="text-lg font-semibold text-white">
-          {currentMonth.toLocaleString("default", { month: "long", year: "numeric" })}
-        </h3>
-        <button
-          onClick={() => handleMonthChange("next")}
-          className="bg-white p-2 rounded-lg shadow-md"
-        >
-          Next
-        </button>
-      </div>
-
-      {/* Calendar Grid */}
-      <div className="grid grid-cols-7 gap-2">
-        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-          <div key={day} className="text-center text-white font-bold">
-            {day}
+        {/* Hero Section */}
+        <div className="relative w-full top-0 left-0 h-[60vh] sm:h-[70vh] lg:h-[80vh]">
+          {/* Cover Image */}
+          <img
+            className="w-full h-full object-cover"
+            src={coverImage}
+            alt="Cover"
+          />
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/60 flex flex-col items-center justify-center">
+            <div className="text-center text-white px-6">
+              <h1 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-300 to-orange-400">
+                Discover Events Like a Local
+              </h1>
+              <p className="mt-4 text-sm md:text-base text-slate-200">
+                Plan your next adventure with Adtrip.
+              </p>
+              {/* Call-to-Action Button */}
+              <button className="mt-6 px-8 py-3 bg-gradient-to-r from-orange-300 to-orange-400 text-white font-semibold rounded-full shadow-lg hover:from-orange-600 hover:to-orange-700 transition duration-300">
+                Plan a Trip
+              </button>
+            </div>
           </div>
-        ))}
-        {getDaysInMonth(currentMonth).map((date, index) => (
-          <div
-            key={index}
-            onClick={() => handleDateClick(date)}
-            className={`p-2 text-center rounded-lg cursor-pointer ${
-              date.getMonth() !== currentMonth.getMonth()
-                ? "text-gray-400"
-                : "text-white"
-            } ${
-              selectedDate &&
-              date.getDate() === selectedDate.getDate() &&
-              date.getMonth() === selectedDate.getMonth() &&
-              date.getFullYear() === selectedDate.getFullYear()
-                ? "bg-blue-500"
-                : hasEvent(date)
-                ? "bg-orange-500"
-                : "bg-slate-700"
-            }`}
-          >
-            {date.getDate()}
-            {hasEvent(date) && (
-              <div className="text-xs text-white mt-1">Event</div>
-            )}
-          </div>
-        ))}
-      </div>
 
-      {/* Display event details for the selected date */}
-      {selectedDate && (
-        <div className="mt-4">
-          <h3 className="text-lg font-semibold text-white mb-2">
-            Events on {selectedDate.toLocaleDateString()}
-          </h3>
-          <ul className="space-y-2">
-            {eventsForSelectedDate.map((event) => (
-              <li key={event.id} className="bg-white p-3 rounded-lg shadow-sm">
-                <h4 className="text-lg font-bold text-gray-900">{event.name}</h4>
-                <p className="text-sm text-gray-600">{event.description}</p>
-                <p className="text-sm text-gray-500">
-                  {parseEventDate(event.start_date).toLocaleTimeString()} -{" "}
-                  {parseEventDate(event.end_date).toLocaleTimeString()}
-                </p>
-              </li>
-            ))}
-          </ul>
+          {/* SearchBar Section */}
+          <section className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-full max-w-[90%] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl z-10">
+            <SearchBar />
+          </section>
         </div>
-      )}
-    </div>
+
+        {/* Upcoming Events Section */}
+        <section className="flex justify-center items-center mt-16 w-full p-8">
+          <div className="text-center">
+            {/* Title */}
+            <p className="text-4xl font-bold">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-300 to-orange-400">
+                Upcoming
+              </span>{" "}
+              <span className="text-slate-800">Events</span>
+            </p>
+
+            {/* Calendar Icon and Line */}
+            <div className="relative mt-4">
+              {/* Line */}
+              <div className="absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-orange-500 to-transparent"></div>
+
+              {/* Calendar Icon */}
+              <div className="relative flex justify-center">
+                <FaCalendarAlt className="text-orange-500 text-3xl bg-slate-100 p-2 rounded-full shadow-md" /> {/* Calendar Icon */}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Little Menu Section */}
+        <section className="flex justify-center w-full mt-8 px-4">
+          <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-2 w-full max-w-4xl overflow-x-auto">
+            <ul className="flex justify-center space-x-6 text-sm sm:text-base">
+              {menuItems.map((item) => (
+                <li
+                  key={item.id}
+                  className={`flex flex-col items-center justify-center p-2 rounded-lg cursor-pointer transition duration-300 ${
+                    activeItem === item.id
+                      ? "bg-orange-100 text-orange-400"
+                      : "bg-orange/50 hover:bg-orange-50 text-slate-700"
+                  }`}
+                  onClick={() => setActiveItem(item.id)}
+                >
+                  <div className="flex items-center justify-center w-10 h-10">
+                    {item.icon}
+                  </div>
+                  <span className="mt-1 text-sm font-medium">{item.label}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        {/* Event List and Calendar Section */}
+        <section className="flex flex-col lg:flex-row w-full p-8 gap-8">
+          {/* Left Side: Event List */}
+          <div className="w-full lg:w-2/3">
+            <EventList />
+          </div>
+
+          {/* Right Side: Calendar Container */}
+          <div className="w-full lg:w-1/3">
+            <EventCalendar /> {/* Replace placeholder with EventCalendar */}
+          </div>
+        </section>
+      </div>
+    </>
   );
 };
 
-export default EventCalendar;
+export default EventPage;

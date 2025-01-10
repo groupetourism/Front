@@ -90,6 +90,7 @@ const EventList: React.FC = () => {
         {events.map((event) => (
           <div key={event.id} className="px-2">
             <EventCard
+              id={event.id} // Pass the event id
               name={event.name}
               description={event.description}
               ticket_price={event.ticket_price}

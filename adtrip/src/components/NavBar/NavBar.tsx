@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const NavBar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -30,9 +31,11 @@ const NavBar: React.FC = () => {
 
           {/* Nav Links (Desktop) */}
           <div className="hidden md:flex space-x-6 font-semibold">
-            <a href="#" className="hover:text-orange-400 transition">
+            <Link  to={`/`}>
+            <p  className="hover:text-orange-400 transition">
               Home
-            </a>
+            </p>
+            </Link>
             <a href="#" className="hover:text-orange-400 transition">
               About
             </a>

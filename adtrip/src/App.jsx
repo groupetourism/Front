@@ -5,6 +5,7 @@ import LoginPage from './pages/Login/LoginPage';
 import SignUpPage from './pages/SignUp/SignUp';
 import DetailsPage from './pages/Details/DetailsPage';
 import EventPage from './pages/Event/EventPage';
+import EventDetailsPage from './pages/Details/EventDetailsPage';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} /> {/* Login page */}
         <Route path="/details/:type/:id" element={<DetailsPage/>} />
         <Route path="/events" element={<EventPage/>} />
+        <Route path="/eventdetails/:events/:id" element={<EventDetailsPage/>} />
       </Routes>
     </Router>
   );
