@@ -95,10 +95,42 @@ const EventDetails: React.FC<EventDetailsProps> = ({ eventId }) => {
         </div>
       </div>
 
-      {/* Additional Event Details */}
-      <div className="p-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Event Details</h2>
-        <p className="text-gray-700">{event.description}</p>
+      {/* Main Content Grid */}
+      <div className="container mx-auto p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Event Details Section */}
+          <div className="lg:col-span-2">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Event Details</h2>
+            <p className="text-gray-700 mb-6">{event.description}</p>
+
+            {/* Additional Details */}
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Additional Information</h3>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm font-semibold text-gray-800">Location:</p>
+                  <p className="text-gray-700"></p>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-gray-800">Organizer:</p>
+                  <p className="text-gray-700"></p>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-gray-800">Category:</p>
+                  <p className="text-gray-700"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Map Section (Empty Space for Now) */}
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">Event Location</h3>
+            <div className="h-64 bg-gray-200 rounded-lg flex items-center justify-center">
+              <p className="text-gray-600">Map will go here</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

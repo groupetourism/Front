@@ -9,8 +9,26 @@ import SearchBar from "../../components/Search/Search";
 import CardsList from "../../components/Cards/CardsList";
 import EventCard from "../../components/Events/EventCard";
 import EventList from "../../components/Events/EventList";
+import { useUser } from "../../context/AuthContext";
 
 const HomePage: React.FC = () => {
+  const { user, loading } = useUser();
+
+  console.log("User in HomePage:", user); // Log the user state
+  console.log("Loading in HomePage:", loading); // Log the loading state
+
+  const handlePlanTrip = () => {
+    if (user) {
+      alert("Planning tour...");
+    } else {
+      alert("Please login first");
+    }
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       {/* Full Page Wrapper */}
@@ -36,7 +54,10 @@ const HomePage: React.FC = () => {
                 Plan your next adventure with Adtrip.
               </p>
               {/* Call-to-Action Button */}
-              <button className="mt-6 px-6 py-3 bg-orange-500 text-white font-semibold rounded-lg shadow-md hover:bg-orange-600 transition">
+              <button 
+                onClick={handlePlanTrip}
+                className="mt-6 px-6 py-3 bg-orange-500 text-white font-semibold rounded-lg shadow-md hover:bg-orange-600 transition"
+              >
                 Plan a Trip
               </button>
             </div>

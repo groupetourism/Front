@@ -80,36 +80,41 @@ const EventCalendar: React.FC = () => {
     [events]
   );
 
-  if (loading) return <div className="text-center text-white">Loading...</div>;
+  if (loading) return <div className="text-center text-gray-900">Loading...</div>;
   if (error) return <div className="text-center text-red-500">Error: {error}</div>;
 
   return (
-    <div className="bg-gradient-to-br from-purple-900 to-indigo-900 rounded-lg shadow-lg p-6">
-      <h2 className="text-2xl font-bold text-white mb-6">Event Calendar</h2>
+    <div className="bg-white rounded-lg shadow-lg p-6">
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">Event Calendar</h2>
 
       {/* Month Navigation */}
       <div className="flex justify-between items-center mb-6">
         <button
           onClick={() => handleMonthChange("prev")}
-          className="bg-white p-2 rounded-full shadow-md hover:bg-gray-200 transition-colors"
+          className="bg-orange-600 p-2 rounded-full shadow-md hover:bg-orange-700 transition-colors"
         >
-          <FaChevronLeft className="text-gray-700" />
+          <FaChevronLeft className="text-white" />
         </button>
-        <h3 className="text-xl font-semibold text-white">
+        <h3 className="text-xl font-semibold text-gray-900">
           {currentMonth.toLocaleString("default", { month: "long", year: "numeric" })}
         </h3>
         <button
           onClick={() => handleMonthChange("next")}
-          className="bg-white p-2 rounded-full shadow-md hover:bg-gray-200 transition-colors"
+          className="bg-orange-600 p-2 rounded-full shadow-md hover:bg-orange-700 transition-colors"
         >
-          <FaChevronRight className="text-gray-700" />
+          <FaChevronRight className="text-white" />
         </button>
       </div>
 
       {/* Calendar Grid */}
       <div className="grid grid-cols-7 gap-2">
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-          <div key={day} className="text-center text-white font-bold text-sm">
+          <div
+            key={day}
+            className={`text-center font-bold text-sm ${
+              day === "Sun" ? "text-orange-700" : "text-gray-900"
+            }`}
+          >
             {day}
           </div>
         ))}
@@ -120,19 +125,25 @@ const EventCalendar: React.FC = () => {
             className={`p-3 text-center rounded-lg cursor-pointer transition-all transform hover:scale-105 ${
               date.getMonth() !== currentMonth.getMonth()
                 ? "text-gray-400"
-                : "text-white"
-            } ${
-              selectedDate &&
-              date.getDate() === selectedDate.getDate() &&
-              date.getMonth() === selectedDate.getMonth() &&
-              date.getFullYear() === selectedDate.getFullYear()
-                ? "bg-blue-500"
+                : selectedDate &&
+                  date.getDate() === selectedDate.getDate() &&
+                  date.getMonth() === selectedDate.getMonth() &&
+                  date.getFullYear() === selectedDate.getFullYear()
+                ? "bg-blue-500 text-white"
                 : hasEvent(date)
-                ? "bg-orange-500"
-                : "bg-slate-700"
-            } hover:bg-slate-600`}
+                ? "bg-orange-400 text-white"
+                : "bg-gray-100 text-gray-900"
+            } hover:bg-gray-200`}
           >
-            <div className="text-lg font-semibold">{date.getDate()}</div>
+            <div
+              className={`text-lg font-semibold ${
+                date.getDay() === 0 && date.getMonth() === currentMonth.getMonth()
+                  ? "text-orange-700"
+                  : ""
+              }`}
+            >
+              {date.getDate()}
+            </div>
             {hasEvent(date) && (
               <div className="text-xs text-white mt-1">Event</div>
             )}
@@ -143,7 +154,7 @@ const EventCalendar: React.FC = () => {
       {/* Display event details for the selected date */}
       {selectedDate && (
         <div className="mt-6">
-          <h3 className="text-xl font-semibold text-white mb-4">
+          <h3 className="text-xl font-semibold text-gray-900 mb-4">
             Events on {selectedDate.toLocaleDateString()}
           </h3>
           <ul className="space-y-3">

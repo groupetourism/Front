@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import coverImage from "/carte.jpg";
 import googleIcon from "/google.png";
 import backgroundIcon2 from "/airport.png";
@@ -6,50 +6,68 @@ import backgroundIcon3 from "/car.png";
 import backgroundIcon4 from "/bridge.png";
 import { useNavigate, Link } from "react-router-dom";
 import { validateLoginForm } from "../../utils/FormValidation";
-import { login, ApiResponse } from "../../api/Auth"; // Import ApiResponse type
+import { login as apiLogin, fetchUserData, ApiResponse } from "../../api/Auth";
+import { useUser } from "../../context/AuthContext";
 
 const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState({
     email: "",
-    phone: "", // Add phone field
+    phone: "",
     password: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showPassword, setShowPassword] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { login } = useUser();
+
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     // Validate form
     const { isValid, errors } = validateLoginForm(formData);
     setErrors(errors);
-
+  
     if (isValid) {
       try {
-        console.log("Form Data:", formData); // Log form data
-        const { data, error }: ApiResponse = await login({
+        console.log("Form Data:", formData);
+        const { data, error }: ApiResponse = await apiLogin({
           email: formData.email,
-          phone: formData.phone, // Include phone in the API call
+          phone: formData.phone,
           password: formData.password,
         });
-
+  
         if (error) {
-          console.error("API Error:", error); // Log API error
+          console.error("API Error:", error);
           setApiError(error);
         } else {
-          console.log("API Response:", data); // Log API response
-          alert("Login successful! Redirecting to dashboard...");
-          navigate("/"); // Redirect to the dashboard or home page
+          console.log("API Response:", data);
+  
+          // Fetch user data using the user_id and token
+          const { data: userData, error: userError } = await fetchUserData(data.user_id, data.token);
+  
+          if (userError) {
+            console.error("Failed to fetch user data:", userError);
+            setApiError(userError);
+          } else {
+            console.log("User Data:", userData);
+  
+            // Update user state in context and localStorage
+            login(userData, data.token);
+  
+            alert("Login successful! Redirecting to dashboard...");
+            navigate("/");
+          }
         }
       } catch (error: any) {
-        console.error("Login failed:", error); // Log unexpected error
-        console.error("Error Details:", {
-          message: error.message,
-          response: error.response?.data,
-          status: error.response?.status,
-        });
+        console.error("Login failed:", error);
         setApiError("An unexpected error occurred. Please try again.");
       }
     }
@@ -82,7 +100,7 @@ const LoginPage: React.FC = () => {
             backgroundImage: `url(${backgroundIcon2}), url(${backgroundIcon3}), url(${backgroundIcon4})`,
             backgroundRepeat: "no-repeat, no-repeat, no-repeat",
             backgroundPosition: "bottom center, bottom left, bottom right",
-            backgroundSize: "20px, 20px, 30px", // Adjusted for smaller screens
+            backgroundSize: "20px, 20px, 30px",
           }}
         >
           <div className="flex flex-col space-y-4 sm:space-y-6 lg:space-y-8">
