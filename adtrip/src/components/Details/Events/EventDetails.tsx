@@ -1,22 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { fetchEventById, EventData } from "../../../api/Events"; // Adjust the import path as needed
-import { imageSrc } from "../../Events/EventCard";
 import NavBar from "../../NavBar/NavBar";
+import { useLocation } from "react-router-dom"; 
 
 interface EventDetailsProps {
   eventId: string; // eventId is always a string
 }
+interface LocationState {
+  imageUrl: string;
+}
 
 const EventDetails: React.FC<EventDetailsProps> = ({ eventId }) => {
   const [event, setEvent] = useState<EventData | null>(null);
+  const location = useLocation(); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+   const imageUrl = (location.state as LocationState)?.imageUrl ||"/cover.jpg"; // Get the image URL from location state
 
+  
   useEffect(() => {
     const fetchEventDetails = async () => {
       try {
-        const response = await fetchEventById(parseInt(eventId)); // Convert eventId to a number
-        console.log("Event data:", response.data);
+        const response = await fetchEventById(parseInt(eventId));
         setEvent(response.data);
       } catch (err) {
         setError("Failed to fetch event details.");
@@ -58,7 +63,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({ eventId }) => {
       {/* Cover Image */}
       <div className="relative w-full h-96">
         <img
-          src={imageSrc}
+          src={imageUrl}
           alt={event.name}
           className="w-full h-full object-cover"
         />

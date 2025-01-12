@@ -5,11 +5,23 @@ import coverImage from "/cover.jpg";
 import SearchBar from "../../components/Search/Search";
 import EventList from "../../components/Events/EventList";
 import EventCalendar from "../../components/Events/EventCalender"; // Import the EventCalendar component
-
+import { useUser } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom"; 
 const EventPage: React.FC = () => {
   // State for active menu item
   const [activeItem, setActiveItem] = useState("all");
-
+  const { user, loading } = useUser();
+  const navigate = useNavigate();
+  const handlePlanTrip = () => {
+    if (user) {
+      // Navigate to the Plans Page
+      navigate("/plans");
+    } else {
+      alert("Please login first");
+      // Optionally, navigate to the Login Page
+      navigate("/login");
+    }
+  };
   // Menu items
   const menuItems = [
     { id: "all", label: "All", icon: <FaStar className="text-orange-500" /> },
@@ -44,7 +56,9 @@ const EventPage: React.FC = () => {
                 Plan your next adventure with Adtrip.
               </p>
               {/* Call-to-Action Button */}
-              <button className="mt-6 px-8 py-3 bg-gradient-to-r from-orange-300 to-orange-400 text-white font-semibold rounded-full shadow-lg hover:from-orange-600 hover:to-orange-700 transition duration-300">
+              <button 
+              onClick={handlePlanTrip}
+              className="mt-6 px-8 py-3 bg-gradient-to-r from-orange-300 to-orange-400 text-white font-semibold rounded-full shadow-lg hover:from-orange-600 hover:to-orange-700 transition duration-300">
                 Plan a Trip
               </button>
             </div>
@@ -116,6 +130,14 @@ const EventPage: React.FC = () => {
             <EventCalendar /> {/* Replace placeholder with EventCalendar */}
           </div>
         </section>
+
+      {/* More Events Section */}
+      <div className="container mx-auto px-6 py-12">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">More Events</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Empty space for more events */}
+        </div>
+      </div>
       </div>
     </>
   );

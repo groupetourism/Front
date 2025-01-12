@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const EventSection: React.FC = () => {
   return (
@@ -15,9 +16,12 @@ const EventSection: React.FC = () => {
           <p className="text-sm sm:text-base md:text-lg lg:text-xl text-left text-gray-100">
             Discover events each with a unique story and experience
           </p>
+          <Link  className="px-6 py-3 w-fit mt-4 md:mt-6"to ="/events">
           <button className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg shadow-md transition w-fit mt-4 md:mt-6">
             Learn More
           </button>
+          </Link>
+         
         </div>
 
         {/* Right Side: Image Content */}

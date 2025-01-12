@@ -10,7 +10,7 @@ interface EventCardProps {
   end_date: string;
   imageUrl: string;
 }
-export const imageSrc =  "/map.jpg"; 
+
 const EventCard: React.FC<EventCardProps> = ({
   id, // Destructure id
   name,
@@ -20,7 +20,7 @@ const EventCard: React.FC<EventCardProps> = ({
   end_date,
   imageUrl,
 }) => {
- const imageSrc =  "/map.jpg"; // Use the provided image URL or a fallback
+
   const descriptionFallback = description || "";
 
   // Function to format the date in a modern style
@@ -39,14 +39,16 @@ const EventCard: React.FC<EventCardProps> = ({
 
   return (
     // Wrap the card content with Link
-    <Link to={`/eventdetails/events/${id}`} className="block">
+    <Link to={`/eventdetails/events/${id}`}
+    state={imageUrl}
+    className="block" >
       {/* Card Main Container */}
       <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2 w-full h-full flex flex-col">
         {/* Image Section */}
         <div className="relative flex-shrink-0">
           {/* Image */}
           <img
-            src={imageSrc}
+            src={imageUrl}
             alt="Event"
             className="w-full h-48 sm:h-56 object-cover rounded-t-lg"
           />
@@ -77,7 +79,7 @@ const EventCard: React.FC<EventCardProps> = ({
           {/* Enroll Button */}
           <div className="mt-auto">
             <button className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold py-2 px-4 rounded-lg hover:from-orange-600 hover:to-orange-700 transition duration-300 shadow-md">
-              Enroll Now
+              Set reminder
             </button>
           </div>
         </div>

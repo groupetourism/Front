@@ -7,6 +7,16 @@ import Next from "/Next.png";
 import Previous from "/Previous.png";
 import { EventData, fetchEvents } from "../../api/Events";
 
+// Dummy image data structure
+const eventImages = {
+  1: "/events/event1.jpg",
+  2: "/events/event2.jpg",
+  3: "/events/event3.jpg",
+  4: "/events/event4.jpg",
+  5: "/events/event5.jpg",
+  6: "/events/event6.jpg",
+};
+
 // Custom Next Arrow
 const NextArrow: React.FC<{ onClick?: () => void }> = ({ onClick }) => {
   return (
@@ -96,7 +106,7 @@ const EventList: React.FC = () => {
               ticket_price={event.ticket_price}
               start_date={event.start_date}
               end_date={event.end_date}
-              imageUrl={event.image}
+              imageUrl={eventImages[event.id as keyof typeof eventImages]}  // Dynamically assign the image path
             />
           </div>
         ))}
