@@ -30,11 +30,11 @@ const LoginPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     // Validate form
     const { isValid, errors } = validateLoginForm(formData);
     setErrors(errors);
-  
+
     if (isValid) {
       try {
         console.log("Form Data:", formData);
@@ -43,25 +43,28 @@ const LoginPage: React.FC = () => {
           phone: formData.phone,
           password: formData.password,
         });
-  
+
         if (error) {
           console.error("API Error:", error);
           setApiError(error);
         } else {
           console.log("API Response:", data);
-  
+
+          // Extract user_id and token from the response
+          const { user_id, token } = data;
+
           // Fetch user data using the user_id and token
-          const { data: userData, error: userError } = await fetchUserData(data.user_id, data.token);
-  
+          const { data: userData, error: userError } = await fetchUserData(user_id, token);
+
           if (userError) {
             console.error("Failed to fetch user data:", userError);
             setApiError(userError);
           } else {
             console.log("User Data:", userData);
-  
+
             // Update user state in context and localStorage
-            login(userData, data.token);
-  
+            login({ id: user_id, data: userData.data }, token);
+
             alert("Login successful! Redirecting to dashboard...");
             navigate("/");
           }

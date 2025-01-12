@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import NavBar from "../../components/NavBar/NavBar";
 import coverImage from "/cover.jpg";
 import SiteList from "../../components/SiteList/SiteList";
@@ -13,15 +14,19 @@ import { useUser } from "../../context/AuthContext";
 
 const HomePage: React.FC = () => {
   const { user, loading } = useUser();
+  const navigate = useNavigate(); // Initialize useNavigate
 
   console.log("User in HomePage:", user); // Log the user state
   console.log("Loading in HomePage:", loading); // Log the loading state
 
   const handlePlanTrip = () => {
     if (user) {
-      alert("Planning tour...");
+      // Navigate to the Plans Page
+      navigate("/plans");
     } else {
       alert("Please login first");
+      // Optionally, navigate to the Login Page
+      navigate("/login");
     }
   };
 

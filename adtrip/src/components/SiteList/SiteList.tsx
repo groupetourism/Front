@@ -7,22 +7,23 @@ const SiteList: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [visibleSites, setVisibleSites] = useState(15); // Number of sites to display
- 
 
   useEffect(() => {
     const fetchData = async () => {
       const { data, error } = await fetchSites();
-      if (data) {
-        setSites(data);
+      if (data && Array.isArray(data)) {
+        setSites(data); // Set the sites if `data` is an array
         setLoading(false);
       } else if (error) {
-        setError(error);
+        setError(error); // Set the error if there's an error
+        setLoading(false);
+      } else {
+        setError("Unexpected response structure"); // Handle unexpected response
         setLoading(false);
       }
     };
     fetchData();
   }, []);
-
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -39,7 +40,6 @@ const SiteList: React.FC = () => {
             id={site.id}
             name={site.name}
             imageUrl={site.image}
-            
           />
         ))}
       </div>

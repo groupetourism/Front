@@ -19,7 +19,8 @@ const UserProfile = () => {
           if (error) {
             setError(error);
           } else {
-            setUser(data); // Update user data in context
+            // Update user data in context with the `data` object from the response
+            setUser({ id: user.id, data: data.data });
           }
         } catch (err) {
           setError("Failed to fetch user data.");
@@ -58,7 +59,7 @@ const UserProfile = () => {
             <FaUserCircle className="text-orange-500 text-8xl" />
           </div>
           <h1 className="text-2xl font-bold text-white">
-            {user ? `${user.firstname} ${user.lastname}` : "Guest"}
+            {user ? `${user.data.firstname} ${user.data.lastname}` : "Guest"}
           </h1>
         </div>
 
@@ -68,7 +69,7 @@ const UserProfile = () => {
             <FaEnvelope className="text-orange-500 text-2xl" />
             <div>
               <p className="text-gray-600">Email</p>
-              <p className="text-black font-medium">{user?.email}</p>
+              <p className="text-black font-medium">{user?.data.email}</p>
             </div>
           </div>
 
@@ -76,7 +77,7 @@ const UserProfile = () => {
             <FaPhone className="text-orange-500 text-2xl" />
             <div>
               <p className="text-gray-600">Phone</p>
-              <p className="text-black font-medium">{user?.phone}</p>
+              <p className="text-black font-medium">{user?.data.phone}</p>
             </div>
           </div>
         </div>

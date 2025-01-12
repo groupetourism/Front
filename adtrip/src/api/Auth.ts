@@ -94,11 +94,22 @@ export const login = async (credentials: LoginCredentials): Promise<ApiResponse>
     const response = await api.post("/login", credentials);
     console.log("Login API response:", response.data);
 
-    // Ensure the response includes the token and user data
+    // Ensure the response includes the token and user_id
+    const token = response.data.token; // Extract token from the response
+    const user_id = response.data.user_id; // Extract user_id from the response
+
+    // Save the token to localStorage
+    if (token) {
+      localStorage.setItem("authToken", token);
+      console.log("Token saved to localStorage");
+    } else {
+      console.error("No token received in the login response");
+    }
+
     return {
       data: {
-        token: response.data.token,
-        user: response.data.user, // Ensure the API returns the user object
+        user_id: user_id,
+        token: token,
       },
     };
   } catch (error: any) {

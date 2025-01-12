@@ -41,11 +41,33 @@ const api = axios.create({
 
 // Fetch all sites
 export const fetchSites = async (): Promise<ApiResponse> => {
+  let allSites: SiteData[] = []; // Array to store all sites
+  let currentPage = 1; // Start with the first page
+  let lastPage = 1; // Will be updated based on the API response
+
   try {
     console.log("Fetching sites...");
-    const response = await api.get("/sites");
-    console.log("Sites fetched successfully:", response.data);
-    return { data: response.data.data }; // Return the `data` array from the response
+
+    // Loop through all pages
+    do {
+      const response = await api.get("/sites", {
+        params: { page: currentPage }, // Pass the current page number
+      });
+
+      console.log(`Fetched page ${currentPage}:`, response.data);
+
+      // Add the sites from the current page to the array
+      if (response.data && Array.isArray(response.data.data)) {
+        allSites = [...allSites, ...response.data.data];
+      }
+
+      // Update pagination details
+      currentPage = response.data.meta.current_page + 1; // Move to the next page
+      lastPage = response.data.meta.last_page; // Update the last page number
+    } while (currentPage <= lastPage); // Continue until all pages are fetched
+
+    console.log("All sites fetched successfully:", allSites);
+    return { data: allSites }; // Return all sites
   } catch (error: any) {
     console.error("Error fetching sites:", {
       message: error.message,
