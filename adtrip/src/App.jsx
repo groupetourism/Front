@@ -10,6 +10,9 @@ import MapPage from './pages/Map/MapPage';
 import UserProfilePage from './pages/User/UserProfilePage';
 import { UserProvider } from './context/AuthContext'; // Adjust the path as needed
 import TourPlanPage from './pages/Tour/TourplanPage';
+import ViewingPage from './pages/AllView/ViewAll';
+import ContactUsPage from './pages/ContactUs/ContactUs';
+import AllAccommodationsPage from './pages/AllView/ViewAllAccomodations';
 function App() {
   return (
     <Router>
@@ -25,6 +28,11 @@ function App() {
           <Route path="/map" element={<MapPage />} />
           <Route path="/profile" element={<UserProfilePage />} />
           <Route path="/plans" element={<TourPlanPage />} />
+          <Route path="/all-sites" element={<ViewingPage/>} />
+          <Route path="/all-accommodations" element={<AllAccommodationsPage/>} />
+          <Route path="/map" element={<MapPage/>} />
+          <Route path="/contact" element={<ContactUsPage/>} />
+          <Route path="/sign-up" element={<SignUpPage/>} />
         </Routes>
       </UserProvider> {/* Add this line */}
     </Router>

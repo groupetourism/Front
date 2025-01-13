@@ -9,23 +9,37 @@ import {
   FaBuilding,
   FaPhone,
   FaGlobe,
-  FaGlassCheers, // Icon for bar capacity
-  FaMapMarkerAlt, // Icon for location
-  FaUser, // Icon for promoter
-} from "react-icons/fa"; // Icons for details
+  FaGlassCheers,
+  FaMapMarkerAlt,
+  FaUser,
+  FaDirections,
+} from "react-icons/fa";
 import image from "/cover.jpg";
+import MapContainer from "../../Map/OlmapContainer"; // Import the MapContainer component
+
 const AccommodationDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [accommodation, setAccommodation] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [address, setAddress] = useState<string | null>(null); // State for human-readable address
 
+  // Fetch accommodation data
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetchAccommodationById(Number(id));
         console.log("Accommodation Data:", response.data); // Log the fetched data
         setAccommodation(response.data);
+
+        // Fetch address using reverse geocoding
+        if (response.data.latitude && response.data.longitude) {
+          const addressResponse = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${response.data.latitude}&lon=${response.data.longitude}`
+          );
+          const addressData = await addressResponse.json();
+          setAddress(addressData.display_name || "Address not available");
+        }
       } catch (error) {
         setError("Failed to fetch accommodation details.");
       } finally {
@@ -53,6 +67,14 @@ const AccommodationDetails: React.FC = () => {
       );
     }
     return <div className="flex space-x-1">{stars}</div>;
+  };
+
+  // Function to open directions in Google Maps
+  const openDirections = () => {
+    if (accommodation.latitude && accommodation.longitude) {
+      const url = `https://www.google.com/maps/dir/?api=1&destination=${accommodation.latitude},${accommodation.longitude}`;
+      window.open(url, "_blank");
+    }
   };
 
   return (
@@ -172,6 +194,37 @@ const AccommodationDetails: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Map Section */}
+      {accommodation.latitude && accommodation.longitude && (
+        <div className="mt-8 bg-white rounded-lg shadow-lg overflow-hidden p-6">
+          <h2 className="text-2xl font-bold mb-6">Location</h2>
+          {/* Address Details */}
+          {address && (
+            <div className="mb-6">
+              <p className="text-gray-700 text-lg">
+                <strong>Address:</strong> {address}
+              </p>
+            </div>
+          )}
+          {/* Directions Button */}
+          <button
+            onClick={openDirections}
+            className="flex items-center space-x-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition duration-300 mb-6"
+          >
+            <FaDirections className="text-xl" />
+            <span>Get Directions</span>
+          </button>
+          {/* Map Container */}
+          <div className="h-96 w-full">
+            <MapContainer
+              latitude={accommodation.latitude}
+              longitude={accommodation.longitude}
+              name={accommodation.name}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

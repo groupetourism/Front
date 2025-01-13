@@ -11,6 +11,9 @@ import CardsList from "../../components/Cards/CardsList";
 import EventCard from "../../components/Events/EventCard";
 import EventList from "../../components/Events/EventList";
 import { useUser } from "../../context/AuthContext";
+import Footer from "../../components/Uielements/Footer"; // Import the Footer component
+import Testimonials from "../../components/Uielements/Testimonials";
+import Services from "../../components/Uielements/Services";
 
 const HomePage: React.FC = () => {
   const { user, loading } = useUser();
@@ -28,6 +31,14 @@ const HomePage: React.FC = () => {
       // Optionally, navigate to the Login Page
       navigate("/login");
     }
+  };
+
+  const handleViewSites = () => {
+    navigate("/all-sites"); // Navigate to all sites
+  };
+
+  const handleViewAccommodations = () => {
+    navigate("/all-accommodations"); // Navigate to all accommodations
   };
 
   if (loading) {
@@ -107,7 +118,10 @@ const HomePage: React.FC = () => {
             <h2 className="text-left text-2xl md:text-3xl font-bold">
               Top Sites to Visit
             </h2>
-            <button className="flex items-center text-sm sm:text-base px-4 py-2 border border-black text-black rounded-2xl transition cursor-pointer hover:bg-black hover:text-white">
+            <button 
+              onClick={handleViewSites}
+              className="flex items-center text-sm sm:text-base px-4 py-2 border border-black text-black rounded-2xl transition cursor-pointer hover:bg-black hover:text-white"
+            >
               View All
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -134,8 +148,11 @@ const HomePage: React.FC = () => {
             <h2 className="text-left text-2xl md:text-3xl font-bold">
               Accommodations
             </h2>
-            <button className="flex items-center text-sm sm:text-base px-4 py-2 border border-black text-black rounded-2xl transition cursor-pointer hover:bg-black hover:text-white">
-              Book Now
+            <button 
+              onClick={handleViewAccommodations}
+              className="flex items-center text-sm sm:text-base px-4 py-2 border border-black text-black rounded-2xl transition cursor-pointer hover:bg-black hover:text-white"
+            >
+              View All
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5 ml-2"
@@ -186,30 +203,20 @@ const HomePage: React.FC = () => {
         <section className="py-10 px-0 sm:px-0 lg:px-0 bg-white">
           <EventSection />
         </section>
-        <section className="py-10 px-10 sm:px-6 lg:px-8 bg-white">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-left text-2xl md:text-3xl font-bold">
-              Explore Site Passes
-            </h2>
-            <button className="flex items-center text-sm sm:text-base px-4 py-2 border border-black text-black rounded-2xl transition cursor-pointer hover:bg-black hover:text-white">
-              See More
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 ml-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M13 7l5 5m0 0l-5 5m5-5H6"
-                />
-              </svg>
-            </button>
-          </div>
-          <EventList/>
+
+        {/* Testimonials */}
+        <section className="w-full bg-slate-100">
+          <Testimonials/>
+        </section>
+
+        {/* Services Section */}
+        <section id="services-section" className="w-full bg-white">
+          <Services/>
+        </section>
+
+        {/* Footer Section */}
+        <section className="w-full bg-gray-900">
+          <Footer />
         </section>
       </div>
     </>

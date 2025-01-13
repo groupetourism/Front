@@ -43,19 +43,20 @@ const UserProfile = () => {
   console.log("User in profile component:", user);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="flex items-center justify-center min-h-screen text-gray-600">Loading...</div>;
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div className="flex items-center justify-center min-h-screen text-red-500">Error: {error}</div>;
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-md overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex items-center justify-center p-4">
+      {/* Profile Card */}
+      <div className="bg-white rounded-xl shadow-lg w-full max-w-md overflow-hidden">
         {/* Header with Avatar */}
-        <div className="bg-orange-500 p-6 flex flex-col items-center">
-          <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center mb-4">
+        <div className="bg-gradient-to-r from-orange-400 to-orange-500 p-6 flex flex-col items-center">
+          <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center mb-4 shadow-md">
             <FaUserCircle className="text-orange-500 text-8xl" />
           </div>
           <h1 className="text-2xl font-bold text-white">
@@ -64,11 +65,11 @@ const UserProfile = () => {
         </div>
 
         {/* Personal Info Section */}
-        <div className="p-6 space-y-4">
+        <div className="p-6 space-y-6">
           <div className="flex items-center space-x-4">
             <FaEnvelope className="text-orange-500 text-2xl" />
             <div>
-              <p className="text-gray-600">Email</p>
+              <p className="text-gray-600 text-sm">Email</p>
               <p className="text-black font-medium">{user?.data.email}</p>
             </div>
           </div>
@@ -76,7 +77,7 @@ const UserProfile = () => {
           <div className="flex items-center space-x-4">
             <FaPhone className="text-orange-500 text-2xl" />
             <div>
-              <p className="text-gray-600">Phone</p>
+              <p className="text-gray-600 text-sm">Phone</p>
               <p className="text-black font-medium">{user?.data.phone}</p>
             </div>
           </div>
@@ -86,7 +87,7 @@ const UserProfile = () => {
         <div className="p-6">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center space-x-2 bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition duration-300"
+            className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-orange-400 to-orange-500 text-white py-3 rounded-lg hover:from-orange-500 hover:to-orange-600 transition duration-300"
           >
             <FaSignOutAlt className="text-lg" />
             <span>Logout</span>
